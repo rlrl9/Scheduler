@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    #    driver-class-name: org.postgresql.Driver
+    #    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 2345
+
+  sql:
+    init:
+      schema-locations: classpath:/schema.sql
+      mode: always
+
+mybatis:
+  mapper-locations: "classpath:/mybatis/mapper/*.xml"
+  config-location: "classpath:/mybatis/MybatisConfig.xml"
+
+logging.level.org.hibernate.orm.jdbc.bind: trace
