@@ -3,9 +3,38 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.ScheduleMapper">
     <insert id="registerSchedule">
-        INSERT INTO schedule (title, content, color, repeat, time) values (#{title}, #{content}, #{color}, #{repeat}, #{time})
+        INSERT INTO schedule (title, content, color, repeat, start_t, end_t)
+        values (#{title}, #{content}, #{color}, #{repeat}, #{startT}, #{endT})
     </insert>
     <select id="showSchedule" resultType="scheduleDTO">
-        SELECT * FROM schedule WHERE id=#{id}
+        SELECT ID
+        ,TITLE
+        ,CONTENT
+        ,COLOR
+        ,REPEAT
+        ,START_T
+        ,END_T
+        FROM schedule
+        WHERE id=#{id}
+    </select>
+    <select id="selectSchedules" resultType="scheduleDTO"
+            parameterType="selectScheduleDTO">
+        SELECT ID
+        ,TITLE
+        ,CONTENT
+        ,COLOR
+        ,REPEAT
+        ,START_T
+        ,END_T
+        FROM schedule
+        <where>
+            <if test="month != null">
+                AND (TO_CHAR(start_t, 'MM') = #{month} OR TO_CHAR(end_t, 'MM') = #{month})
+                <if test="week != null">
+                    AND (TO_NUMBER(TO_CHAR(start_t, 'W'), '99') = #{week} OR TO_NUMBER(TO_CHAR(end_t, 'W'), '99') = #{week})
+                </if>
+            </if>
+        </where>
+        ORDER BY start_t
     </select>
 </mapper>

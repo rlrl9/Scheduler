@@ -1,18 +1,17 @@
 package com.example.demo.dto;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 public class ScheduleDTO {
     private int id;
     private String title;
     private String content;
     private String color;
     private String repeat;
-    private LocalDate time;
+    private LocalDateTime startT;
+    private LocalDateTime endT;
 }

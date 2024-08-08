@@ -1,9 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.ScheduleDTO;
+import com.example.demo.dto.SelectScheduleDTO;
 import com.example.demo.mapper.ScheduleMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -20,5 +23,9 @@ public class ScheduleService {
 
     public ScheduleDTO showSchedule(Long id) {
         return scheduleMapper.showSchedule(id);
+    }
+
+    public List<ScheduleDTO> selectSchedules(SelectScheduleDTO sld) {
+        return scheduleMapper.selectSchedules(sld);
     }
 }
