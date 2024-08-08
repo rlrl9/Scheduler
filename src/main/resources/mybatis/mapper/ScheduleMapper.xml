@@ -37,4 +37,7 @@
         </where>
         ORDER BY start_t
     </select>
+    <insert id="insertUploadImage">
+        insert into file(postId, filename, fileExtension, fileUrl) values (#{postId}, #{filename}, #{fileExtension}, #{fileUrl})
+    </insert>
 </mapper>

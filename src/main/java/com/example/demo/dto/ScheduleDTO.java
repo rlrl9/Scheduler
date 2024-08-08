@@ -1,8 +1,6 @@
 package com.example.demo.dto;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
 
-import java.time.LocalDate;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Data

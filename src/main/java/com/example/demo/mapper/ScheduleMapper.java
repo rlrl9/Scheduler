@@ -1,4 +1,5 @@
 package com.example.demo.mapper;
+import com.example.demo.dto.FileDTO;
 import com.example.demo.dto.ScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,4 +11,6 @@ public interface ScheduleMapper {
     void registerSchedule(ScheduleDTO scheduleDTO);
     ScheduleDTO showSchedule(Long id);
     List<ScheduleDTO> selectSchedules(SelectScheduleDTO sld);
+
+    void insertUploadImage(FileDTO fileDTO);
 }

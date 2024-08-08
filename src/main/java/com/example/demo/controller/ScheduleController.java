@@ -1,15 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.FileDTO;
 import com.example.demo.dto.ScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
+import com.example.demo.dto.UploadImageVO;
 import com.example.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,14 +14,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
 public class ScheduleController {
+
     private final ScheduleService scheduleService;
 
     //스케줄 등록
     @PostMapping(produces = "application/json; charset=utf-8")
-    public void RegisterSchedule(@RequestBody ScheduleDTO scheduleDTO) throws
+    public void RegisterSchedule(@RequestBody ScheduleDTO scheduleDTO, UploadImageVO uploadImageVO) throws
             IOException {
-        scheduleService.registerSchedule(scheduleDTO);
+        scheduleService.registerSchedule(scheduleDTO,uploadImageVO);
     }
+
     //스케줄 상세
     @GetMapping("/{id}")
     public ScheduleDTO ShowSchedule(@PathVariable("id") Long id) throws IOException {
