@@ -29,9 +29,9 @@
         FROM schedule
         <where>
             <if test="month != null">
-                AND (TO_CHAR(start_t, 'MM') = #{month} OR TO_CHAR(end_t, 'MM') = #{month})
+                AND (TO_NUMBER(TO_CHAR(start_t, 'MM'), '99') = #{month} OR TO_NUMBER(TO_CHAR(end_t, 'MM'), '99') = #{month})
                 <if test="week != null">
-                    AND (TO_NUMBER(TO_CHAR(start_t, 'W'), '99') = #{week} OR TO_NUMBER(TO_CHAR(end_t, 'W'), '99') = #{week})
+                    AND (TO_NUMBER(TO_CHAR(start_t, 'IW'), '99') = #{totalWeek} OR TO_NUMBER(TO_CHAR(end_t, 'IW'), '99') = #{totalWeek})
                 </if>
             </if>
         </where>
