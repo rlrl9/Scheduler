@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.ScheduleMapper">
-    <insert id="registerSchedule">
+    <insert id="registerSchedule" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO schedule (title, content, color, repeat, start_t, end_t)
         values (#{title}, #{content}, #{color}, #{repeat}, #{startT}, #{endT})
     </insert>
@@ -38,6 +39,6 @@
         ORDER BY start_t
     </select>
     <insert id="insertUploadImage">
-        insert into file(postId, filename, fileExtension, fileUrl) values (#{postId}, #{filename}, #{fileExtension}, #{fileUrl})
+        insert into file(post_id, filename, file_extension, file_url) values (#{postId}, #{filename}, #{fileExtension}, #{fileUrl})
     </insert>
 </mapper>

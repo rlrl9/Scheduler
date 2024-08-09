@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.FileDTO;
 import com.example.demo.dto.ScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
-import com.example.demo.dto.UploadImageVO;
 import com.example.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +16,10 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     //스케줄 등록
-    @PostMapping(produces = "application/json; charset=utf-8")
-    public void RegisterSchedule(@RequestBody ScheduleDTO scheduleDTO, UploadImageVO uploadImageVO) throws
+    @PostMapping
+    public void RegisterSchedule(ScheduleDTO scheduleDTO) throws
             IOException {
-        scheduleService.registerSchedule(scheduleDTO,uploadImageVO);
+        scheduleService.registerSchedule(scheduleDTO);
     }
 
     //스케줄 상세

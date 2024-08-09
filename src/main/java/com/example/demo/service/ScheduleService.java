@@ -3,7 +3,6 @@ package com.example.demo.service;
 import com.example.demo.dto.FileDTO;
 import com.example.demo.dto.ScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
-import com.example.demo.dto.UploadImageVO;
 import com.example.demo.mapper.ScheduleMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +22,10 @@ public class ScheduleService {
         this.scheduleMapper = scheduleMapper;
     }
 
-    public void registerSchedule(ScheduleDTO scheduleDTO, UploadImageVO vo) {
+    public void registerSchedule(ScheduleDTO scheduleDTO) {
         scheduleMapper.registerSchedule(scheduleDTO);
         try{
-            MultipartFile[] uploadImageFiles = vo.getUploadImageFiles();
+            MultipartFile[] uploadImageFiles = scheduleDTO.getUploadImageFiles();
             FileDTO fileDTO = new FileDTO();
             if(!uploadImageFiles[0].isEmpty()){
                 String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
