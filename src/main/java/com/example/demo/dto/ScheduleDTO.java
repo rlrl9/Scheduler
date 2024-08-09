@@ -6,6 +6,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Data
 public class ScheduleDTO {
@@ -19,4 +22,12 @@ public class ScheduleDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endT;
     private MultipartFile[] uploadImageFiles;
+//    private String fileUrls;
+//    public List<String> getFileUrls() {
+//        if (fileUrls != null && !fileUrls.isEmpty()) {
+//            return Arrays.asList(fileUrls.split(","));
+//        } else {
+//            return Collections.emptyList();
+//        }
+//    }
 }

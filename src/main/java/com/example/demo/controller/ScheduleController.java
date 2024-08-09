@@ -4,13 +4,14 @@ import com.example.demo.dto.ScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
 import com.example.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/schedule")
+@RequestMapping("/schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;

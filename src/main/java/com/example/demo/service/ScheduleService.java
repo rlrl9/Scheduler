@@ -24,35 +24,30 @@ public class ScheduleService {
 
     public void registerSchedule(ScheduleDTO scheduleDTO) {
         scheduleMapper.registerSchedule(scheduleDTO);
-        try{
+        if (scheduleDTO.getUploadImageFiles() != null) {
             MultipartFile[] uploadImageFiles = scheduleDTO.getUploadImageFiles();
             FileDTO fileDTO = new FileDTO();
-            if(!uploadImageFiles[0].isEmpty()){
-                String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
-                fileDTO.setPostId(scheduleDTO.getId());
-                for (MultipartFile mfile : uploadImageFiles) {
-                    String filename = UUID.randomUUID().toString();
-                    try{
-                        String originalFilename = mfile.getOriginalFilename();
-                        String contentType = mfile.getContentType();
-                        String fileExtension = "." + (contentType.substring(contentType.indexOf("/") + 1));
+            String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
+            fileDTO.setPostId(scheduleDTO.getId());
+            for (MultipartFile mfile : uploadImageFiles) {
+                String filename = UUID.randomUUID().toString();
+                try {
+                    String originalFilename = mfile.getOriginalFilename();
+                    String contentType = mfile.getContentType();
+                    String fileExtension = "." + (contentType.substring(contentType.indexOf("/") + 1));
 
-                        File filepath = new File(path + filename + fileExtension);
-                        mfile.transferTo(filepath);
+                    File filepath = new File(path + filename + fileExtension);
+                    mfile.transferTo(filepath);
 
-                        fileDTO.setFilename(originalFilename.substring(0, originalFilename.indexOf(".")));
-                        fileDTO.setFileExtension(fileExtension);
-                        fileDTO.setFileUrl("/images/post/" + filename + fileExtension);
-                        scheduleMapper.insertUploadImage(fileDTO);
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
+                    fileDTO.setFilename(originalFilename.substring(0, originalFilename.indexOf(".")));
+                    fileDTO.setFileExtension(fileExtension);
+                    fileDTO.setFileUrl("/images/" + filename + fileExtension);
+                    scheduleMapper.insertUploadImage(fileDTO);
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
                 }
             }
-        } catch(Exception e){
-            e.printStackTrace();
         }
-
     }
 
     public ScheduleDTO showSchedule(Long id) {
