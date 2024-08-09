@@ -4,29 +4,47 @@
 <mapper namespace="com.example.demo.mapper.ScheduleMapper">
     <insert id="registerSchedule" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO schedule (title, content, color, repeat, start_t, end_t)
-        values (#{title}, #{content}, #{color}, #{repeat}, #{startT}, #{endT})
+        INSERT INTO schedule
+        (
+        TITLE,
+        content,
+        color,
+        repeat,
+        start_t,
+        end_t
+        )
+        values
+        (
+        #{title},
+        #{content},
+        #{color},
+        #{repeat},
+        #{startT},
+        #{endT}
+        )
     </insert>
     <select id="showSchedule" resultType="scheduleDTO">
-        SELECT ID
-        ,TITLE
-        ,CONTENT
-        ,COLOR
-        ,REPEAT
-        ,START_T
-        ,END_T
+        SELECT
+        ID,
+        TITLE,
+        CONTENT,
+        COLOR,
+        REPEAT,
+        START_T,
+        END_T
         FROM schedule
-        WHERE id=#{id}
+        WHERE id = #{id}
     </select>
     <select id="selectSchedules" resultType="scheduleDTO"
             parameterType="selectScheduleDTO">
-        SELECT ID
-        ,TITLE
-        ,CONTENT
-        ,COLOR
-        ,REPEAT
-        ,START_T
-        ,END_T
+        SELECT
+        ID,
+        TITLE,
+        CONTENT,
+        COLOR,
+        REPEAT,
+        START_T,
+        END_T
         FROM schedule
         <where>
             <if test="month != null">
@@ -39,6 +57,19 @@
         ORDER BY start_t
     </select>
     <insert id="insertUploadImage">
-        insert into file(post_id, filename, file_extension, file_url) values (#{postId}, #{filename}, #{fileExtension}, #{fileUrl})
+        insert into file
+        (
+        post_id,
+        filename,
+        file_extension,
+        file_url
+        )
+        values
+        (
+        #{postId},
+        #{filename},
+        #{fileExtension},
+        #{fileUrl}
+        )
     </insert>
 </mapper>
