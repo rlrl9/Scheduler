@@ -26,7 +26,8 @@
 
     <!-- 별칭 작성 부분 -->
     <typeAliases>
-        <typeAlias type="com.example.demo.dto.ScheduleDTO"  		alias="scheduleDTO"/>
+        <typeAlias type="com.example.demo.dto.RequestScheduleDTO" alias="requestScheduleDTO"/>
+        <typeAlias type="com.example.demo.dto.ResponseScheduleDTO" alias="responseScheduleDTO"/>
         <typeAlias type="com.example.demo.dto.SelectScheduleDTO"  	alias="selectScheduleDTO"/>
     </typeAliases>
 

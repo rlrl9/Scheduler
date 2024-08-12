@@ -23,38 +23,40 @@
         #{endT}
         )
     </insert>
-    <select id="showSchedule" resultType="scheduleDTO">
+    <select id="showSchedule" resultType="responseScheduleDTO">
         SELECT
-        ID,
-        TITLE,
-        CONTENT,
-        COLOR,
-        REPEAT,
-        START_T,
-        END_T
-        FROM schedule
-        WHERE id = #{id}
+        s.ID,
+        s.TITLE,
+        s.CONTENT,
+        s.COLOR,
+        s.REPEAT,
+        s.START_T,
+        s.END_T,
+        (select array_to_string(array(SELECT file_url FROM file as f where f.post_id=s.id),',')) as file_urls
+        FROM schedule s
+        WHERE s.id = #{id}
     </select>
-    <select id="selectSchedules" resultType="scheduleDTO"
+    <select id="selectSchedules" resultType="responseScheduleDTO"
             parameterType="selectScheduleDTO">
         SELECT
-        ID,
-        TITLE,
-        CONTENT,
-        COLOR,
-        REPEAT,
-        START_T,
-        END_T
-        FROM schedule
+        s.ID,
+        s.TITLE,
+        s.CONTENT,
+        s.COLOR,
+        s.REPEAT,
+        s.START_T,
+        s.END_T,
+        (select array_to_string(array(SELECT file_url FROM file as f where f.post_id=s.id),',')) as file_urls
+        FROM schedule s
         <where>
             <if test="month != null">
-                AND (TO_NUMBER(TO_CHAR(start_t, 'MM'), '99') = #{month} OR TO_NUMBER(TO_CHAR(end_t, 'MM'), '99') = #{month})
+                AND (TO_NUMBER(TO_CHAR(s.start_t, 'MM'), '99') = #{month} OR TO_NUMBER(TO_CHAR(s.end_t, 'MM'), '99') = #{month})
                 <if test="week != null">
-                    AND (TO_NUMBER(TO_CHAR(start_t, 'IW'), '99') = #{totalWeek} OR TO_NUMBER(TO_CHAR(end_t, 'IW'), '99') = #{totalWeek})
+                    AND (TO_NUMBER(TO_CHAR(s.start_t, 'IW'), '99') = #{totalWeek} OR TO_NUMBER(TO_CHAR(s.end_t, 'IW'), '99') = #{totalWeek})
                 </if>
             </if>
         </where>
-        ORDER BY start_t
+        ORDER BY s.start_t
     </select>
     <insert id="insertUploadImage">
         insert into file

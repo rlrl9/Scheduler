@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ScheduleDTO;
+import com.example.demo.dto.RequestScheduleDTO;
+import com.example.demo.dto.ResponseScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
 import com.example.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
@@ -18,20 +18,20 @@ public class ScheduleController {
 
     //스케줄 등록
     @PostMapping
-    public void RegisterSchedule(ScheduleDTO scheduleDTO) throws
+    public void RegisterSchedule(RequestScheduleDTO requestScheduleDTO) throws
             IOException {
-        scheduleService.registerSchedule(scheduleDTO);
+        scheduleService.registerSchedule(requestScheduleDTO);
     }
 
     //스케줄 상세
     @GetMapping("/{id}")
-    public ScheduleDTO ShowSchedule(@PathVariable("id") Long id) throws IOException {
+    public ResponseScheduleDTO ShowSchedule(@PathVariable("id") Long id) throws IOException {
         return scheduleService.showSchedule(id);
     }
 
     //주별/월별 조회, 전체 조회
     @GetMapping("/view")
-    public List<ScheduleDTO> ShowScheduleWeekly(
+    public List<ResponseScheduleDTO> ShowScheduleWeekly(
             @RequestParam(value = "month", required = false) Integer month,
             @RequestParam(value = "week", required = false) Integer week) throws IOException {
         SelectScheduleDTO sld = new SelectScheduleDTO(month,week);

@@ -1,7 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.FileDTO;
-import com.example.demo.dto.ScheduleDTO;
+import com.example.demo.dto.RequestScheduleDTO;
+import com.example.demo.dto.ResponseScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
 import com.example.demo.mapper.ScheduleMapper;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,13 @@ public class ScheduleService {
         this.scheduleMapper = scheduleMapper;
     }
 
-    public void registerSchedule(ScheduleDTO scheduleDTO) {
-        scheduleMapper.registerSchedule(scheduleDTO);
-        if (scheduleDTO.getUploadImageFiles() != null) {
-            MultipartFile[] uploadImageFiles = scheduleDTO.getUploadImageFiles();
+    public void registerSchedule(RequestScheduleDTO requestScheduleDTO) {
+        scheduleMapper.registerSchedule(requestScheduleDTO);
+        if (requestScheduleDTO.getUploadImageFiles() != null) {
+            MultipartFile[] uploadImageFiles = requestScheduleDTO.getUploadImageFiles();
             FileDTO fileDTO = new FileDTO();
             String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
-            fileDTO.setPostId(scheduleDTO.getId());
+            fileDTO.setPostId(requestScheduleDTO.getId());
             for (MultipartFile mfile : uploadImageFiles) {
                 String filename = UUID.randomUUID().toString();
                 try {
@@ -50,11 +51,11 @@ public class ScheduleService {
         }
     }
 
-    public ScheduleDTO showSchedule(Long id) {
+    public ResponseScheduleDTO showSchedule(Long id) {
         return scheduleMapper.showSchedule(id);
     }
 
-    public List<ScheduleDTO> selectSchedules(SelectScheduleDTO sld) {
+    public List<ResponseScheduleDTO> selectSchedules(SelectScheduleDTO sld) {
         return scheduleMapper.selectSchedules(sld);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 import com.example.demo.dto.FileDTO;
-import com.example.demo.dto.ScheduleDTO;
+import com.example.demo.dto.RequestScheduleDTO;
+import com.example.demo.dto.ResponseScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -11,11 +12,11 @@ import java.util.List;
 public interface ScheduleMapper {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    void registerSchedule(ScheduleDTO scheduleDTO);
+    void registerSchedule(RequestScheduleDTO requestScheduleDTO);
 
-    ScheduleDTO showSchedule(Long id);
+    ResponseScheduleDTO showSchedule(Long id);
 
-    List<ScheduleDTO> selectSchedules(SelectScheduleDTO sld);
+    List<ResponseScheduleDTO> selectSchedules(SelectScheduleDTO sld);
 
     void insertUploadImage(FileDTO fileDTO);
 }
