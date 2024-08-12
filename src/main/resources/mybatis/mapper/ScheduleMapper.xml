@@ -55,6 +55,9 @@
                     AND (TO_NUMBER(TO_CHAR(s.start_t, 'IW'), '99') = #{totalWeek} OR TO_NUMBER(TO_CHAR(s.end_t, 'IW'), '99') = #{totalWeek})
                 </if>
             </if>
+            <if test="color != null">
+                AND s.color = #{color}
+            </if>
         </where>
         ORDER BY s.start_t
     </select>
@@ -74,4 +77,33 @@
         #{fileUrl}
         )
     </insert>
+    <delete id="deleteSchedule">
+        delete
+        from schedule
+        where id = #{id}
+    </delete>
+    <delete id="deleteImage">
+        delete
+        from file
+        where post_id = #{id}
+    </delete>
+    <update id="patchSchedule">
+        UPDATE schedule
+        SET
+        TITLE = #{title},
+        CONTENT = #{content},
+        COLOR = #{color},
+        REPEAT = #{repeat},
+        START_T = #{startT},
+        END_T = #{endT}
+        WHERE id = #{id}
+    </update>
+    <update id="patchImage">
+        UPDATE file
+        SET
+        filename = #{filename},
+        file_extension = #{fileExtension},
+        file_url = #{fileUrl}
+        WHERE post_id = #{postId}
+    </update>
 </mapper>

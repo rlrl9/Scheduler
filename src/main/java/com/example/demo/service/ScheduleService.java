@@ -55,8 +55,42 @@ public class ScheduleService {
         return scheduleMapper.showSchedule(id);
     }
 
-    public List<ResponseScheduleDTO> selectSchedules(Integer month, Integer week) {
-        SelectScheduleDTO sld = new SelectScheduleDTO(month,week);
+    public List<ResponseScheduleDTO> selectSchedules(Integer month, Integer week, String color) {
+        SelectScheduleDTO sld = new SelectScheduleDTO(month,week,color);
         return scheduleMapper.selectSchedules(sld);
+    }
+
+    public void deleteSchedule(Long id) {
+        scheduleMapper.deleteSchedule(id);
+        scheduleMapper.deleteImage(id);
+    }
+
+    public void patchSchedule(Long id,RequestScheduleDTO requestScheduleDTO) {
+        requestScheduleDTO.setId(id.intValue());
+        scheduleMapper.patchSchedule(requestScheduleDTO);
+        if (requestScheduleDTO.getUploadImageFiles() != null) {
+            MultipartFile[] uploadImageFiles = requestScheduleDTO.getUploadImageFiles();
+            FileDTO fileDTO = new FileDTO();
+            String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
+            fileDTO.setPostId(id.intValue());
+            for (MultipartFile mfile : uploadImageFiles) {
+                String filename = UUID.randomUUID().toString();
+                try {
+                    String originalFilename = mfile.getOriginalFilename();
+                    String contentType = mfile.getContentType();
+                    String fileExtension = "." + (contentType.substring(contentType.indexOf("/") + 1));
+
+                    File filepath = new File(path + filename + fileExtension);
+                    mfile.transferTo(filepath);
+
+                    fileDTO.setFilename(originalFilename.substring(0, originalFilename.indexOf(".")));
+                    fileDTO.setFileExtension(fileExtension);
+                    fileDTO.setFileUrl("/images/" + filename + fileExtension);
+                    scheduleMapper.patchImage(fileDTO);
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        }
     }
 }

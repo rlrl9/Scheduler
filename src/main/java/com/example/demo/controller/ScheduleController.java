@@ -35,7 +35,23 @@ public class ScheduleController {
     @GetMapping("/list")
     public ResponseEntity<List<ResponseScheduleDTO>> ShowScheduleWeekly(
             @RequestParam(value = "month", required = false) Integer month,
-            @RequestParam(value = "week", required = false) Integer week) {
-        return new ResponseEntity<>(scheduleService.selectSchedules(month,week), HttpStatus.OK);
+            @RequestParam(value = "week", required = false) Integer week,
+            @RequestParam(value = "color", required = false) String color) {
+        return new ResponseEntity<>(scheduleService.selectSchedules(month,week,color), HttpStatus.OK);
+    }
+
+    //스케줄 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSchedule(@PathVariable("id") Long id) {
+        scheduleService.deleteSchedule(id);
+        return new ResponseEntity<>("삭제 성공", HttpStatus.RESET_CONTENT);
+    }
+
+    //스케줄 수정
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> patchSchedule(@PathVariable("id") Long id,
+                                       RequestScheduleDTO requestScheduleDTO) {
+        scheduleService.patchSchedule(id,requestScheduleDTO);
+        return new ResponseEntity<>("수정 성공", HttpStatus.RESET_CONTENT);
     }
 }

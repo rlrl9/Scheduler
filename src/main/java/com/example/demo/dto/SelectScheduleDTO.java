@@ -13,9 +13,11 @@ public class SelectScheduleDTO {
     private Integer month;
     private Integer week;
     private Integer totalWeek;
-    public SelectScheduleDTO(Integer month, Integer week) {
+    private String color;
+    public SelectScheduleDTO(Integer month, Integer week, String color) {
         this.month = month;
         this.week = week;
+        this.color = color;
         if (month != null && week != null) {
             this.totalWeek = getTotalWeekly(month, week);
         }

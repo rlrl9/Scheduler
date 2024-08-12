@@ -19,4 +19,12 @@ public interface ScheduleMapper {
     List<ResponseScheduleDTO> selectSchedules(SelectScheduleDTO sld);
 
     void insertUploadImage(FileDTO fileDTO);
+
+    void deleteSchedule(Long id);
+
+    void deleteImage(Long id);
+
+    void patchSchedule(RequestScheduleDTO requestScheduleDTO);
+
+    void patchImage(FileDTO fileDTO);
 }
