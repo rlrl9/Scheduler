@@ -20,9 +20,9 @@ public class SelectScheduleDTO {
             this.totalWeek = getTotalWeekly(month, week);
         }
     }
-
+    //1년으로 따졌을 때 해당 월의 해당 주차가 총 몇 주차인지 계산하는 함수
     public static Integer getTotalWeekly(Integer month, Integer week) {
-
+        //2024년이라고 가정
         int year = 2024;
 
         LocalDate startOfMarch = LocalDate.of(year, month, 1);

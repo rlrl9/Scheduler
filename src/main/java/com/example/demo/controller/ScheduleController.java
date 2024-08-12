@@ -20,22 +20,22 @@ public class ScheduleController {
 
     //스케줄 등록
     @PostMapping
-    public void RegisterSchedule(RequestScheduleDTO requestScheduleDTO) {
+    public ResponseEntity<String> RegisterSchedule(RequestScheduleDTO requestScheduleDTO) {
         scheduleService.registerSchedule(requestScheduleDTO);
+        return new ResponseEntity<>("저장 성공", HttpStatus.OK);
     }
 
     //스케줄 상세
     @GetMapping("/{id}")
-    public ResponseEntity ShowSchedule(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseScheduleDTO> ShowSchedule(@PathVariable("id") Long id) {
         return new ResponseEntity<>(scheduleService.showSchedule(id), HttpStatus.OK);
     }
 
     //주별/월별 조회, 전체 조회
     @GetMapping("/list")
-    public ResponseEntity ShowScheduleWeekly(
+    public ResponseEntity<List<ResponseScheduleDTO>> ShowScheduleWeekly(
             @RequestParam(value = "month", required = false) Integer month,
             @RequestParam(value = "week", required = false) Integer week) {
-        SelectScheduleDTO sld = new SelectScheduleDTO(month,week);
-        return new ResponseEntity<>(scheduleService.selectSchedules(sld), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.selectSchedules(month,week), HttpStatus.OK);
     }
 }

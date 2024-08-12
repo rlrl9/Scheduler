@@ -55,7 +55,8 @@ public class ScheduleService {
         return scheduleMapper.showSchedule(id);
     }
 
-    public List<ResponseScheduleDTO> selectSchedules(SelectScheduleDTO sld) {
+    public List<ResponseScheduleDTO> selectSchedules(Integer month, Integer week) {
+        SelectScheduleDTO sld = new SelectScheduleDTO(month,week);
         return scheduleMapper.selectSchedules(sld);
     }
 }
