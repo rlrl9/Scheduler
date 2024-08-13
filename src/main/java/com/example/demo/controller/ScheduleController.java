@@ -31,7 +31,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.showSchedule(id), HttpStatus.OK);
     }
 
-    //주별/월별 조회, 전체 조회
+    //주별/월별 조회, 전체 조회, 색상별 조회
     @GetMapping("/list")
     public ResponseEntity<List<ResponseScheduleDTO>> ShowScheduleWeekly(
             @RequestParam(value = "month", required = false) Integer month,
