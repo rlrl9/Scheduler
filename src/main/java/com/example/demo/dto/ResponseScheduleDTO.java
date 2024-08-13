@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,35 +37,47 @@ public class ResponseScheduleDTO {
     public String getAlarm(){
         String msg="";
         LocalDateTime now = LocalDateTime.now();
+        long differenceInMillis = Timestamp.valueOf(startT).getTime() - Timestamp.valueOf(now).getTime();
+        long days = (differenceInMillis / (24 * 60 * 60 * 1000L)) % 365;
+        long hours = (differenceInMillis / (60 * 60 * 1000L)) % 24;
+        long minutes = (differenceInMillis / (60 * 1000L)) % 60;
+        long seconds = (differenceInMillis / 1000) % 60;
         if (repeat.equals("매일")){
-            int hour = startT.getHour() - now.getHour();
-            int min = startT.getMinute() - now.getMinute();
-            if (hour>=0 && min>=0){
-                msg = hour + "시간 " + min + "분 전입니다.";
+            if (hours>=0 && minutes>=0 && seconds>=0){
+                msg = hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
             }else {
-                msg = (24 + hour) + "시간 " + (60 + min) + "분 전입니다.";
+                hours = 24 + ((differenceInMillis / (60 * 60 * 1000L)) % 24);
+                minutes = 60 + ((differenceInMillis / (60 * 1000L)) % 60);
+                seconds = 60 + ((differenceInMillis / 1000) % 60);
+                msg = hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
             }
         }
         else if (repeat.equals("매주")){
-            long days = DAYS.between(now,startT);
-            int hour = startT.getHour() - now.getHour();
-//            int day = hour/24;
-//            hour = hour%24;
-            int min = startT.getMinute() - now.getMinute();
-            if (days>=0 && hour>=0 && min>=0){
-                msg = days + "일 " + hour + "시간 " + min + "분 전입니다.";
+            if (days>=0 && hours>=0 && minutes>=0 && seconds>=0){
+                msg = days + "일 " + hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
             }else{
-                msg = (7 + days) + "일 " + (24 + hour) + "시간 " + (60 + min) + "분 전입니다.";
+                int diff = now.getDayOfYear() - startT.getDayOfYear();
+                System.out.println("1:"+diff);
+                diff = diff/7;
+                System.out.println("diff/7:"+diff);
+                differenceInMillis = Timestamp.valueOf(startT.plusWeeks(diff+1)).getTime() - Timestamp.valueOf(now).getTime();
+                days = (differenceInMillis / (24 * 60 * 60 * 1000L)) % 365;
+                hours = (differenceInMillis / (60 * 60 * 1000L)) % 24;
+                minutes = (differenceInMillis / (60 * 1000L)) % 60;
+                seconds = (differenceInMillis / 1000) % 60;
+                msg = days + "일 " + hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
             }
         }
         else if (repeat.equals("매월")){
-            long days = DAYS.between(startT,now);
-            int hour = startT.getHour() - now.getHour();
-            int min = startT.getMinute() - now.getMinute();
-            if (days>=0 && hour>=0 && min>=0){
-                msg = days + "일 " + hour + "시간 " + min + "분 전입니다.";
+            if (days>=0 && hours>=0 && minutes>=0 && seconds>=0){
+                msg = days + "일 " + hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
             }else{
-                msg = (30 + days) + "일 " + (24 + hour) + "시간 " + (60 + min) + "분 전입니다.";
+                differenceInMillis = Timestamp.valueOf(startT.plusMonths(1)).getTime() - Timestamp.valueOf(now).getTime();
+                days = (differenceInMillis / (24 * 60 * 60 * 1000L)) % 365;
+                hours = (differenceInMillis / (60 * 60 * 1000L)) % 24;
+                minutes = (differenceInMillis / (60 * 1000L)) % 60;
+                seconds = (differenceInMillis / 1000) % 60;
+                msg = days + "일 " + hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
             }
         }
         return msg;
