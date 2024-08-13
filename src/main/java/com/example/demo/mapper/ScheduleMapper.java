@@ -26,5 +26,5 @@ public interface ScheduleMapper {
 
     void patchSchedule(RequestScheduleDTO requestScheduleDTO);
 
-    void patchImage(FileDTO fileDTO);
+    Integer ifSchedule(int id);
 }

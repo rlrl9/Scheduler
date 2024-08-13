@@ -106,4 +106,10 @@
         file_url = #{fileUrl}
         WHERE post_id = #{postId}
     </update>
+    <select id="ifSchedule" resultType="Integer">
+        SELECT
+        ID
+        FROM schedule
+        WHERE id = #{id}
+    </select>
 </mapper>
