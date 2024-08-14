@@ -62,7 +62,13 @@ public class ResponseScheduleDTO {
                 break;
             case "매월":
                 if (days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
-                    differenceInMillis = Timestamp.valueOf(startT.plusMonths(1)).getTime() - Timestamp.valueOf(now).getTime();
+                    int diff = now.getMonthValue()-startT.getMonthValue();
+                    long diffMills = Timestamp.valueOf(now).getTime() - Timestamp.valueOf(startT.plusMonths(diff)).getTime();
+                    if(diffMills>0){
+                        differenceInMillis = Timestamp.valueOf(startT.plusMonths(diff+1)).getTime() - Timestamp.valueOf(now).getTime();
+                    }else{
+                        differenceInMillis = Timestamp.valueOf(startT.plusMonths(diff)).getTime() - Timestamp.valueOf(now).getTime();
+                    }
                     days = (differenceInMillis / (24 * 60 * 60 * 1000L)) % 365;
                     hours = (differenceInMillis / (60 * 60 * 1000L)) % 24;
                     minutes = (differenceInMillis / (60 * 1000L)) % 60;
