@@ -42,7 +42,11 @@ public class ResponseScheduleDTO {
         switch (repeat) {
             case "매일":
                 if (hours < 0 || minutes < 0 || seconds < 0) {
-                    hours = 24 + ((differenceInMillis / (60 * 60 * 1000L)) % 24);
+                    if(minutes!=0||seconds!=0){
+                        hours = 23 + ((differenceInMillis / (60 * 60 * 1000L)) % 24);
+                    }else{
+                        hours = 24 + ((differenceInMillis / (60 * 60 * 1000L)) % 24);
+                    }
                     minutes = 60 + ((differenceInMillis / (60 * 1000L)) % 60);
                     seconds = 60 + ((differenceInMillis / 1000) % 60);
                 }
