@@ -41,19 +41,23 @@ public class ResponseScheduleDTO {
         long seconds = (differenceInMillis / 1000) % 60;
         switch (repeat) {
             case "매일":
-                if (hours < 0 || minutes < 0 || seconds < 0) {
-                    if(minutes!=0||seconds!=0){
+                if (differenceInMillis<0) {
+                    if(minutes<=0||seconds<=0){
                         hours = 23 + ((differenceInMillis / (60 * 60 * 1000L)) % 24);
                     }else{
                         hours = 24 + ((differenceInMillis / (60 * 60 * 1000L)) % 24);
                     }
-                    minutes = 60 + ((differenceInMillis / (60 * 1000L)) % 60);
+                    if(seconds<=0){
+                        minutes = 59 + ((differenceInMillis / (60 * 1000L)) % 60);
+                    }else{
+                        minutes = 60 + ((differenceInMillis / (60 * 1000L)) % 60);
+                    }
                     seconds = 60 + ((differenceInMillis / 1000) % 60);
                 }
                 msg = hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
                 break;
             case "매주":
-                if (days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
+                if (differenceInMillis<0) {
                     int diff = now.getDayOfYear() - startT.getDayOfYear();
                     diff = diff / 7;
                     differenceInMillis = Timestamp.valueOf(startT.plusWeeks(diff + 1)).getTime() - Timestamp.valueOf(now).getTime();
@@ -65,7 +69,7 @@ public class ResponseScheduleDTO {
                 msg = days + "일 " + hours + "시간 " + minutes + "분 " + seconds + "초 전입니다.";
                 break;
             case "매월":
-                if (days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
+                if (differenceInMillis<0) {
                     int diff = now.getMonthValue()-startT.getMonthValue();
                     long diffMills = Timestamp.valueOf(now).getTime() - Timestamp.valueOf(startT.plusMonths(diff)).getTime();
                     if(diffMills>0){
