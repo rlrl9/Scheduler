@@ -66,6 +66,7 @@ public class ScheduleService {
     }
 
     public void patchSchedule(Long id,RequestScheduleDTO requestScheduleDTO) {
+//        Integer i = scheduleMapper.ifSchedule2(id.intValue()).orElseThrow(() -> new RuntimeException("데이터가 존재하지 않습니다."));
         if (scheduleMapper.ifSchedule(id.intValue())!=null){
             requestScheduleDTO.setId(id.intValue());
             scheduleMapper.patchSchedule(requestScheduleDTO);
