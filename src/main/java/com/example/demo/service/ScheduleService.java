@@ -5,6 +5,8 @@ import com.example.demo.dto.RequestScheduleDTO;
 import com.example.demo.dto.ResponseScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
 import com.example.demo.mapper.ScheduleMapper;
+import com.example.demo.schedule.exception.ScheduleBussinessException;
+import com.example.demo.schedule.exception.ScheduleExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,8 +68,8 @@ public class ScheduleService {
     }
 
     public void patchSchedule(Long id,RequestScheduleDTO requestScheduleDTO) {
-//        Integer i = scheduleMapper.ifSchedule2(id.intValue()).orElseThrow(() -> new RuntimeException("데이터가 존재하지 않습니다."));
-        if (scheduleMapper.ifSchedule(id.intValue())!=null){
+        Integer i = scheduleMapper.findById(id).orElseThrow(() -> new ScheduleBussinessException(ScheduleExceptionCode.NOT_EXIST_SCHEDULE));
+//        if (scheduleMapper.findById(id)!=null){
             requestScheduleDTO.setId(id.intValue());
             scheduleMapper.patchSchedule(requestScheduleDTO);
             scheduleMapper.deleteImage(id);
@@ -96,6 +98,6 @@ public class ScheduleService {
                     }
                 }
             }
-        }
+//        }
     }
 }

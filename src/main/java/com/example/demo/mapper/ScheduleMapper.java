@@ -27,7 +27,7 @@ public interface ScheduleMapper {
 
     void patchSchedule(RequestScheduleDTO requestScheduleDTO);
 
-    Integer ifSchedule(int id);
+//    Integer ifSchedule(int id);
 
-    Optional<Integer> ifSchedule2(int id);
+    Optional<Integer> findById(Long id);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.global.response;
 
+import com.example.demo.global.exception.ExceptionCode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,10 @@ public class ApiResponse <T>{
 
     public static ApiResponse<?> successWithNoContent() {
         return new ApiResponse<>(SUCCESS_STATUS, null, null, null);
+    }
+
+    public static ApiResponse<?> errorResponse(ExceptionCode exceptionCode){
+        return new ApiResponse<>(ERROR_STATUS, null, exceptionCode.getCode(), exceptionCode.getMessage());
     }
 
     private ApiResponse(String status, T data, String code, String message) {
