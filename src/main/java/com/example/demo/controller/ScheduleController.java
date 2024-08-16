@@ -21,14 +21,12 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<?> RegisterSchedule(RequestScheduleDTO requestScheduleDTO) {
         scheduleService.registerSchedule(requestScheduleDTO);
-//        return new ResponseEntity<>("저장 성공", HttpStatus.OK);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successWithNoContent());
     }
 
     //스케줄 상세
     @GetMapping("/{id}")
     public ResponseEntity<?> ShowSchedule(@PathVariable("id") Long id) {
-//        return new ResponseEntity<>(scheduleService.showSchedule(id), HttpStatus.OK);
         ResponseScheduleDTO rpDTO = scheduleService.showSchedule(id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successResponse(rpDTO));
     }
@@ -39,7 +37,6 @@ public class ScheduleController {
             @RequestParam(value = "month", required = false) Integer month,
             @RequestParam(value = "week", required = false) Integer week,
             @RequestParam(value = "color", required = false) String color) {
-//        return new ResponseEntity<>(scheduleService.selectSchedules(month,week,color), HttpStatus.OK);
         List<ResponseScheduleDTO> lrpDTO = scheduleService.selectSchedules(month,week,color);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successResponse(lrpDTO));
     }
@@ -48,7 +45,6 @@ public class ScheduleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSchedule(@PathVariable("id") Long id) {
         scheduleService.deleteSchedule(id);
-//        return new ResponseEntity<>("삭제 성공", HttpStatus.RESET_CONTENT);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successWithNoContent());
     }
 
@@ -57,7 +53,6 @@ public class ScheduleController {
     public ResponseEntity<?> patchSchedule(@PathVariable("id") Long id,
                                        RequestScheduleDTO requestScheduleDTO) {
         scheduleService.patchSchedule(id,requestScheduleDTO);
-//        return new ResponseEntity<>("수정 성공", HttpStatus.RESET_CONTENT);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successWithNoContent());
     }
 }
