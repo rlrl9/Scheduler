@@ -106,7 +106,7 @@
         file_url = #{fileUrl}
         WHERE post_id = #{postId}
     </update>
-    <select id="ifSchedule" resultType="Integer">
+    <select id="findById" resultType="Integer">
         SELECT
         ID
         FROM schedule
