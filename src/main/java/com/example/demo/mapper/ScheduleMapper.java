@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface ScheduleMapper {
@@ -26,5 +27,7 @@ public interface ScheduleMapper {
 
     void patchSchedule(RequestScheduleDTO requestScheduleDTO);
 
-    Integer ifSchedule(int id);
+//    Integer ifSchedule(int id);
+
+    Optional<Integer> findById(Long id);
 }
