@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.RequestScheduleDTO;
 import com.example.demo.dto.ResponseScheduleDTO;
-import com.example.demo.service.ScheduleService;
+import com.example.demo.service.impl.ScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import com.example.demo.global.response.ApiResponse;
 @RequestMapping("/schedules")
 public class ScheduleController {
 
-    private final ScheduleService scheduleService;
+    private final ScheduleServiceImpl scheduleService;
 
     //스케줄 등록
     @PostMapping
