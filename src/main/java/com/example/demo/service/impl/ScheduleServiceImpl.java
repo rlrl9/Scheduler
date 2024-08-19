@@ -29,11 +29,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 첨부파일과 함께 스케줄 등록
+     *
      * @param requestScheduleDTO
      */
     @Override
     public void registerSchedule(RequestScheduleDTO requestScheduleDTO) {
+        //스케줄 등록
         scheduleMapper.registerSchedule(requestScheduleDTO);
+        //이미지 등록
         if (requestScheduleDTO.getUploadImageFiles() != null) {
             MultipartFile[] uploadImageFiles = requestScheduleDTO.getUploadImageFiles();
             FileDTO fileDTO = new FileDTO();
@@ -62,6 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 단일 스케줄 조회
+     *
      * @param id
      * @return
      */
@@ -72,6 +76,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 조건에 따른 스케줄 리스트 조회
+     *
      * @param month
      * @param week
      * @param color
@@ -79,57 +84,61 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public List<ResponseScheduleDTO> selectSchedules(Integer month, Integer week, String color) {
-        SelectScheduleDTO sld = new SelectScheduleDTO(month,week,color);
+        SelectScheduleDTO sld = new SelectScheduleDTO(month, week, color);
         return scheduleMapper.selectSchedules(sld);
     }
 
     /**
      * 스케줄 삭제
+     *
      * @param id
      */
     @Override
     public void deleteSchedule(Long id) {
+        //스케줄 삭제
         scheduleMapper.deleteSchedule(id);
+        //이미지 삭제
         scheduleMapper.deleteImage(id);
     }
 
     /**
      * 스케줄 수정
+     *
      * @param id
      * @param requestScheduleDTO
      */
     @Override
-    public void patchSchedule(Long id,RequestScheduleDTO requestScheduleDTO) {
+    public void patchSchedule(Long id, RequestScheduleDTO requestScheduleDTO) {
+        //스케줄 조회 후 존재할 시 수정, 기존 이미지 전부 삭제
         Integer i = scheduleMapper.findById(id).orElseThrow(() -> new ScheduleBussinessException(ScheduleExceptionCode.NOT_EXIST_SCHEDULE));
-//        if (scheduleMapper.findById(id)!=null){
-            requestScheduleDTO.setId(id.intValue());
-            scheduleMapper.patchSchedule(requestScheduleDTO);
-            scheduleMapper.deleteImage(id);
-            if (requestScheduleDTO.getUploadImageFiles() != null) {
-                MultipartFile[] uploadImageFiles = requestScheduleDTO.getUploadImageFiles();
-                FileDTO fileDTO = new FileDTO();
-                String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
-                fileDTO.setPostId(id.intValue());
-                for (MultipartFile mfile : uploadImageFiles) {
-                    String filename = UUID.randomUUID().toString();
-                    try {
-                        String originalFilename = mfile.getOriginalFilename();
-                        String contentType = mfile.getContentType();
-                        String fileExtension = "." + (contentType.substring(contentType.indexOf("/") + 1));
+        requestScheduleDTO.setId(id.intValue());
+        scheduleMapper.patchSchedule(requestScheduleDTO);
+        scheduleMapper.deleteImage(id);
+        //이미지 등록
+        if (requestScheduleDTO.getUploadImageFiles() != null) {
+            MultipartFile[] uploadImageFiles = requestScheduleDTO.getUploadImageFiles();
+            FileDTO fileDTO = new FileDTO();
+            String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
+            fileDTO.setPostId(id.intValue());
+            for (MultipartFile mfile : uploadImageFiles) {
+                String filename = UUID.randomUUID().toString();
+                try {
+                    String originalFilename = mfile.getOriginalFilename();
+                    String contentType = mfile.getContentType();
+                    String fileExtension = "." + (contentType.substring(contentType.indexOf("/") + 1));
 
-                        File filepath = new File(path + filename + fileExtension);
-                        mfile.transferTo(filepath);
+                    File filepath = new File(path + filename + fileExtension);
+                    mfile.transferTo(filepath);
 
-                        fileDTO.setFilename(originalFilename.substring(0, originalFilename.indexOf(".")));
-                        fileDTO.setFileExtension(fileExtension);
-                        fileDTO.setFileUrl("/images/" + filename + fileExtension);
+                    fileDTO.setFilename(originalFilename.substring(0, originalFilename.indexOf(".")));
+                    fileDTO.setFileExtension(fileExtension);
+                    fileDTO.setFileUrl("/images/" + filename + fileExtension);
 
-                        scheduleMapper.insertUploadImage(fileDTO);
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
+                    scheduleMapper.insertUploadImage(fileDTO);
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
                 }
             }
-//        }
+        }
     }
 }
