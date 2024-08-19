@@ -75,6 +75,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional(readOnly = true)
     @Override
     public Optional<ResponseScheduleDTO> selectById(Long id) {
+        //스케줄 존재하는 지 확인
+        ResponseScheduleDTO i = scheduleMapper.selectById(id)
+                .orElseThrow(() -> new ScheduleBusinessException(ScheduleExceptionInfo.NOT_EXIST_SCHEDULE));
         return scheduleMapper.selectById(id);
     }
 

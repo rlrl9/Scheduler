@@ -45,7 +45,7 @@
             , S.repeat
             , S.start_t
             , S.end_t
-            (SELECT array_to_string(array(SELECT file_url FROM file F where F.post_id = S.id),',')) as file_urls
+            , (SELECT array_to_string(array(SELECT file_url FROM file F where F.post_id = S.id),',')) as file_urls
         FROM schedule S
         <where>
             <if test="month != null">
