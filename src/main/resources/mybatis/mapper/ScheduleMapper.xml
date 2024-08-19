@@ -109,12 +109,12 @@
         WHERE post_id = #{postId}
     </update>
 
-    <!-- 스케줄 존재하는지 체크-->
-    <select id="findById" resultType="Integer">
-        SELECT
-        id
-        FROM schedule
-        WHERE id = #{id}
-    </select>
+<!--    &lt;!&ndash; 스케줄 존재하는지 체크&ndash;&gt;-->
+<!--    <select id="findById" resultType="Integer">-->
+<!--        SELECT-->
+<!--        id-->
+<!--        FROM schedule-->
+<!--        WHERE id = #{id}-->
+<!--    </select>-->
 
 </mapper>

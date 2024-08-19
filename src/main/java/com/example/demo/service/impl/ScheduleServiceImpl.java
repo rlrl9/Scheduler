@@ -31,7 +31,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 첨부파일과 함께 스케줄 등록
      *
      * @param requestScheduleDTO
-     * return
+     * @return
      */
     @Transactional
     @Override
@@ -101,6 +101,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public void deleteSchedule(Long id) {
+        //스케줄 존재하는 지 확인
+        ResponseScheduleDTO i = scheduleMapper.selectById(id)
+                .orElseThrow(() -> new ScheduleBusinessException(ScheduleExceptionInfo.NOT_EXIST_SCHEDULE));
         //이미지 삭제
         scheduleMapper.deleteImageByPostId(id);
         //스케줄 삭제
