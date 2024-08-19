@@ -2,114 +2,119 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.ScheduleMapper">
-    <insert id="registerSchedule" useGeneratedKeys="true"
-            keyProperty="id">
-        INSERT INTO schedule
-        (
-        TITLE,
-        content,
-        color,
-        repeat,
-        start_t,
-        end_t
-        )
-        values
-        (
-        #{title},
-        #{content},
-        #{color},
-        #{repeat},
-        #{startT},
-        #{endT}
-        )
+
+    <!-- 스케줄 등록 -->
+    <insert id="registerSchedule" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO schedule (
+                              title
+                              , content
+                              , color
+                              , repeat
+                              , start_t
+                              , end_t)
+        VALUES ( #{title}
+               , #{content}
+               , #{color}
+               , #{repeat}
+               , #{startT}
+               , #{endT})
     </insert>
+
+    <!-- 스케줄 상세 표시-->
     <select id="showSchedule" resultType="responseScheduleDTO">
         SELECT
-        s.ID,
-        s.TITLE,
-        s.CONTENT,
-        s.COLOR,
-        s.REPEAT,
-        s.START_T,
-        s.END_T,
-        (select array_to_string(array(SELECT file_url FROM file as f where f.post_id=s.id),',')) as file_urls
-        FROM schedule s
-        WHERE s.id = #{id}
+            S.id
+            , S.title
+            , S.content
+            , S.color
+            , S.repeat
+            , S.start_t
+            , S.end_t
+            , (SELECT array_to_string(array(SELECT file_url FROM file F WHERE F.post_id = S.id),',')) AS file_urls
+        FROM schedule S
+        WHERE S.id = #{id}
     </select>
-    <select id="selectSchedules" resultType="responseScheduleDTO"
-            parameterType="selectScheduleDTO">
+
+    <!-- 스케줄 검색 (월별, 주별, 색상별)-->
+    <select id="selectSchedules" resultType="responseScheduleDTO" parameterType="selectScheduleDTO">
         SELECT
-        s.ID,
-        s.TITLE,
-        s.CONTENT,
-        s.COLOR,
-        s.REPEAT,
-        s.START_T,
-        s.END_T,
-        (select array_to_string(array(SELECT file_url FROM file as f where f.post_id=s.id),',')) as file_urls
-        FROM schedule s
+            S.id
+            , S.title
+            , S.content
+            , S.color
+            , S.repeat
+            , S.start_t
+            , S.end_t
+            (SELECT array_to_string(array(SELECT file_url FROM file F where F.post_id = S.id),',')) as file_urls
+        FROM schedule S
         <where>
             <if test="month != null">
-                AND (TO_NUMBER(TO_CHAR(s.start_t, 'MM'), '99') = #{month} OR TO_NUMBER(TO_CHAR(s.end_t, 'MM'), '99') = #{month})
+                AND (TO_NUMBER(TO_CHAR(S.start_t, 'MM'), '99') = #{month} OR TO_NUMBER(TO_CHAR(S.end_t, 'MM'), '99') = #{month})
                 <if test="week != null">
-                    AND (TO_NUMBER(TO_CHAR(s.start_t, 'IW'), '99') = #{totalWeek} OR TO_NUMBER(TO_CHAR(s.end_t, 'IW'), '99') = #{totalWeek})
+                    AND (TO_NUMBER(TO_CHAR(S.start_t, 'IW'), '99') = #{totalWeek} OR TO_NUMBER(TO_CHAR(S.end_t, 'IW'), '99') = #{totalWeek})
                 </if>
             </if>
             <if test="color != null">
-                AND s.color = #{color}
+                AND S.color = #{color}
             </if>
         </where>
-        ORDER BY s.start_t
+        ORDER BY S.start_t
     </select>
+
+    <!-- 이미지 등록-->
     <insert id="insertUploadImage">
-        insert into file
-        (
-        post_id,
-        filename,
-        file_extension,
-        file_url
-        )
-        values
-        (
-        #{postId},
-        #{filename},
-        #{fileExtension},
-        #{fileUrl}
-        )
+        INSERT INTO file (
+                          post_id
+                          , filename
+                          , file_extension
+                          , file_url)
+        VALUES ( #{postId}
+               , #{filename}
+               , #{fileExtension}
+               , #{fileUrl})
     </insert>
+
+    <!-- 스케줄 삭제-->
     <delete id="deleteSchedule">
-        delete
-        from schedule
-        where id = #{id}
+        DELETE
+        FROM schedule
+        WHERE id = #{id}
     </delete>
+
+    <!-- 이미지 삭제-->
     <delete id="deleteImage">
-        delete
-        from file
-        where post_id = #{id}
+        DELETE
+        FROM file
+        WHERE post_id = #{id}
     </delete>
+
+    <!-- 스케줄 수정-->
     <update id="patchSchedule">
         UPDATE schedule
-        SET
-        TITLE = #{title},
-        CONTENT = #{content},
-        COLOR = #{color},
-        REPEAT = #{repeat},
-        START_T = #{startT},
-        END_T = #{endT}
+        SET title = #{title}
+          , content = #{content}
+          , color = #{color}
+          , repeat = #{repeat}
+          , start_t = #{startT}
+          , end_t = #{endT}
         WHERE id = #{id}
     </update>
+
+    <!-- 이미지 수정-->
     <update id="patchImage">
         UPDATE file
-        SET
-        filename = #{filename},
-        file_extension = #{fileExtension},
-        file_url = #{fileUrl}
+        SET filename = #{filename}
+          , file_extension = #{fileExtension}
+          , file_url = #{fileUrl}
         WHERE post_id = #{postId}
     </update>
+
+    <!-- 스케줄 존재하는지 체크-->
     <select id="findById" resultType="Integer">
         SELECT
-        ID
+        id
         FROM schedule
         WHERE id = #{id}
     </select>
+
 </mapper>

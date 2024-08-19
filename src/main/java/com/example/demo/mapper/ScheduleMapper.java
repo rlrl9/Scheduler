@@ -12,22 +12,28 @@ import java.util.Optional;
 @Mapper
 public interface ScheduleMapper {
 
+    //스케줄 등록
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void registerSchedule(RequestScheduleDTO requestScheduleDTO);
 
+    //스케줄 상세 조회
     ResponseScheduleDTO showSchedule(Long id);
 
+    //스케줄 검색
     List<ResponseScheduleDTO> selectSchedules(SelectScheduleDTO sld);
 
+    //이미지 업로드
     void insertUploadImage(FileDTO fileDTO);
 
+    //스케줄 삭제
     void deleteSchedule(Long id);
 
+    //이미지 삭제
     void deleteImage(Long id);
 
+    //스케줄 수정
     void patchSchedule(RequestScheduleDTO requestScheduleDTO);
 
-//    Integer ifSchedule(int id);
-
+    //스케줄 존재하는 지 확인
     Optional<Integer> findById(Long id);
 }
