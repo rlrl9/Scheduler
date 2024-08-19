@@ -14,10 +14,10 @@ public interface ScheduleMapper {
 
     //스케줄 등록
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    void registerSchedule(RequestScheduleDTO requestScheduleDTO);
+    void insertSchedule(RequestScheduleDTO requestScheduleDTO);
 
     //스케줄 상세 조회
-    ResponseScheduleDTO showSchedule(Long id);
+    Optional<ResponseScheduleDTO> selectById(Long id);
 
     //스케줄 검색
     List<ResponseScheduleDTO> selectSchedules(SelectScheduleDTO sld);
@@ -29,11 +29,11 @@ public interface ScheduleMapper {
     void deleteSchedule(Long id);
 
     //이미지 삭제
-    void deleteImage(Long id);
+    void deleteImageByPostId(Long id);
 
     //스케줄 수정
     void patchSchedule(RequestScheduleDTO requestScheduleDTO);
 
     //스케줄 존재하는 지 확인
-    Optional<Integer> findById(Long id);
+//    Optional<Integer> findById(Long id);
 }

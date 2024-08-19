@@ -4,7 +4,7 @@
 <mapper namespace="com.example.demo.mapper.ScheduleMapper">
 
     <!-- 스케줄 등록 -->
-    <insert id="registerSchedule" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSchedule" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO schedule (
                               title
                               , content
@@ -21,7 +21,7 @@
     </insert>
 
     <!-- 스케줄 상세 표시-->
-    <select id="showSchedule" resultType="responseScheduleDTO">
+    <select id="selectById" resultType="responseScheduleDTO">
         SELECT
             S.id
             , S.title
@@ -82,7 +82,7 @@
     </delete>
 
     <!-- 이미지 삭제-->
-    <delete id="deleteImage">
+    <delete id="deleteImageByPostId">
         DELETE
         FROM file
         WHERE post_id = #{id}

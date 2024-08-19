@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 public class ResponseScheduleDTO {
-    private int id; // 스케줄 아이디
+    private Long id; // 스케줄 아이디
     private String title; //스케줄 제목
     private String content; // 스케줄 내용
     private String color; // 스케줄 색상

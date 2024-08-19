@@ -10,9 +10,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<ApiResponse> handleBusinessException(BusinessException e){
-        log.error("handleBusinessException e.code : {}, e.message : {}", e.getExceptionCode().getCode(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.errorResponse(e.getExceptionCode()));
+    protected ResponseEntity<ApiResponse<?>> handleBusinessException(BusinessException e){
+        log.error("handleBusinessException e.code : {}, e.message : {}", e.getExceptionInfo().getCode(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.errorResponse(e.getExceptionInfo()));
     }
+
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ApiResponse<?>> handleException(Exception e){
+        log.error("handleBusinessException e.code : {}, e.message : {}", null, e.getMessage());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.errorResponse(e.getMessage()));
+    }
+
 }

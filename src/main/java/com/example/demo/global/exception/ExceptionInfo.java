@@ -1,6 +1,6 @@
 package com.example.demo.global.exception;
 
-public interface ExceptionCode {
+public interface ExceptionInfo {
     String getCode();
     String getMessage();
 }

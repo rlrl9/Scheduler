@@ -5,8 +5,8 @@ import com.example.demo.dto.RequestScheduleDTO;
 import com.example.demo.dto.ResponseScheduleDTO;
 import com.example.demo.dto.SelectScheduleDTO;
 import com.example.demo.mapper.ScheduleMapper;
-import com.example.demo.schedule.exception.ScheduleBussinessException;
-import com.example.demo.schedule.exception.ScheduleExceptionCode;
+import com.example.demo.schedule.exception.ScheduleBusinessException;
+import com.example.demo.schedule.exception.ScheduleExceptionInfo;
 import com.example.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * 스케줄 서비스 구현
  */
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleMapper scheduleMapper;
@@ -31,11 +31,13 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 첨부파일과 함께 스케줄 등록
      *
      * @param requestScheduleDTO
+     * return
      */
+    @Transactional
     @Override
-    public void registerSchedule(RequestScheduleDTO requestScheduleDTO) {
+    public ResponseScheduleDTO insertSchedule(RequestScheduleDTO requestScheduleDTO) {
         //스케줄 등록
-        scheduleMapper.registerSchedule(requestScheduleDTO);
+        scheduleMapper.insertSchedule(requestScheduleDTO);
         //이미지 등록
         if (requestScheduleDTO.getUploadImageFiles() != null) {
             MultipartFile[] uploadImageFiles = requestScheduleDTO.getUploadImageFiles();
@@ -61,6 +63,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 }
             }
         }
+        return scheduleMapper.selectById(requestScheduleDTO.getId()).orElse(null);
     }
 
     /**
@@ -69,9 +72,10 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param id
      * @return
      */
+    @Transactional(readOnly = true)
     @Override
-    public ResponseScheduleDTO showSchedule(Long id) {
-        return scheduleMapper.showSchedule(id);
+    public Optional<ResponseScheduleDTO> selectById(Long id) {
+        return scheduleMapper.selectById(id);
     }
 
     /**
@@ -82,6 +86,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param color
      * @return
      */
+    @Transactional(readOnly = true)
     @Override
     public List<ResponseScheduleDTO> selectSchedules(Integer month, Integer week, String color) {
         SelectScheduleDTO sld = new SelectScheduleDTO(month, week, color);
@@ -93,12 +98,13 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
      * @param id
      */
+    @Transactional
     @Override
     public void deleteSchedule(Long id) {
+        //이미지 삭제
+        scheduleMapper.deleteImageByPostId(id);
         //스케줄 삭제
         scheduleMapper.deleteSchedule(id);
-        //이미지 삭제
-        scheduleMapper.deleteImage(id);
     }
 
     /**
@@ -106,20 +112,23 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
      * @param id
      * @param requestScheduleDTO
+     * @return
      */
+    @Transactional
     @Override
-    public void patchSchedule(Long id, RequestScheduleDTO requestScheduleDTO) {
+    public ResponseScheduleDTO patchSchedule(Long id, RequestScheduleDTO requestScheduleDTO) {
         //스케줄 조회 후 존재할 시 수정, 기존 이미지 전부 삭제
-        Integer i = scheduleMapper.findById(id).orElseThrow(() -> new ScheduleBussinessException(ScheduleExceptionCode.NOT_EXIST_SCHEDULE));
-        requestScheduleDTO.setId(id.intValue());
+        ResponseScheduleDTO i = scheduleMapper.selectById(id)
+                .orElseThrow(() -> new ScheduleBusinessException(ScheduleExceptionInfo.NOT_EXIST_SCHEDULE));
+        requestScheduleDTO.setId(id);
         scheduleMapper.patchSchedule(requestScheduleDTO);
-        scheduleMapper.deleteImage(id);
+        scheduleMapper.deleteImageByPostId(id);
         //이미지 등록
         if (requestScheduleDTO.getUploadImageFiles() != null) {
             MultipartFile[] uploadImageFiles = requestScheduleDTO.getUploadImageFiles();
             FileDTO fileDTO = new FileDTO();
             String path = System.getProperty("user.dir") + "/src/main/resources/static/images/";
-            fileDTO.setPostId(id.intValue());
+            fileDTO.setPostId(id);
             for (MultipartFile mfile : uploadImageFiles) {
                 String filename = UUID.randomUUID().toString();
                 try {
@@ -140,5 +149,6 @@ public class ScheduleServiceImpl implements ScheduleService {
                 }
             }
         }
+        return scheduleMapper.selectById(id).orElse(null);
     }
 }
