@@ -1,7 +1,6 @@
 package com.example.demo.global.response;
 
 import com.example.demo.global.exception.ExceptionInfo;
-import com.example.demo.schedule.exception.ScheduleExceptionInfo;
 import com.example.demo.schedule.success.ScheduleSuccessInfo;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
