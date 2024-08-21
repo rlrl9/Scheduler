@@ -4,7 +4,7 @@
 <mapper namespace="com.example.demo.mapper.ScheduleMapper">
 
     <!-- 스케줄 등록 -->
-    <insert id="registerSchedule" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSchedule" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO schedule (
                               title
                               , content
@@ -21,7 +21,7 @@
     </insert>
 
     <!-- 스케줄 상세 표시-->
-    <select id="showSchedule" resultType="responseScheduleDTO">
+    <select id="selectById" resultType="responseScheduleDTO">
         SELECT
             S.id
             , S.title
@@ -45,7 +45,7 @@
             , S.repeat
             , S.start_t
             , S.end_t
-            (SELECT array_to_string(array(SELECT file_url FROM file F where F.post_id = S.id),',')) as file_urls
+            , (SELECT array_to_string(array(SELECT file_url FROM file F where F.post_id = S.id),',')) as file_urls
         FROM schedule S
         <where>
             <if test="month != null">
@@ -82,7 +82,7 @@
     </delete>
 
     <!-- 이미지 삭제-->
-    <delete id="deleteImage">
+    <delete id="deleteImageByPostId">
         DELETE
         FROM file
         WHERE post_id = #{id}
@@ -109,12 +109,12 @@
         WHERE post_id = #{postId}
     </update>
 
-    <!-- 스케줄 존재하는지 체크-->
-    <select id="findById" resultType="Integer">
-        SELECT
-        id
-        FROM schedule
-        WHERE id = #{id}
-    </select>
+<!--    &lt;!&ndash; 스케줄 존재하는지 체크&ndash;&gt;-->
+<!--    <select id="findById" resultType="Integer">-->
+<!--        SELECT-->
+<!--        id-->
+<!--        FROM schedule-->
+<!--        WHERE id = #{id}-->
+<!--    </select>-->
 
 </mapper>
